@@ -2,7 +2,7 @@
   <img src="assets/logo_council.png" alt="Logo du Conseil Provincial de Safi" width="120"/>
 </p>
 
-<h1 align="center">SGRH — Système de Gestion des Ressources Humaines</h1>
+<h1 align="center">SIRH — Système d'Information des Ressources Humaines</h1>
 
 <p align="center">
   <strong>Conseil Provincial de Safi</strong><br>
@@ -12,8 +12,10 @@
 <p align="center">
   <img src="https://img.shields.io/badge/version-1.0.0-blue" alt="Version"/>
   <img src="https://img.shields.io/badge/platform-Android-brightgreen" alt="Platform"/>
-  <img src="https://img.shields.io/badge/Flutter-3.41+-02569B?logo=flutter" alt="Flutter"/>
-  <img src="https://img.shields.io/badge/Supabase-3FCF8E?logo=supabase" alt="Supabase"/>
+  <img src="https://img.shields.io/badge/Kotlin-2.2+-7F52FF?logo=kotlin" alt="Kotlin"/>
+  <img src="https://img.shields.io/badge/Spring_Boot-3.4-6DB33F?logo=springboot" alt="Spring Boot"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql" alt="PostgreSQL"/>
+  <img src="https://img.shields.io/badge/Hugging_Face-FFD21E?logo=huggingface" alt="Hugging Face"/>
 </p>
 
 ---
@@ -23,7 +25,7 @@
 - [Aperçu](#aperçu)
 - [Fonctionnalités](#fonctionnalités)
 - [Architecture technique](#architecture-technique)
-- [Flux de données](#flux-de-données)
+- [API Endpoints](#api-endpoints)
 - [Captures d'écran](#captures-décran)
 - [Installation](#installation)
 - [Schémas de base de données](#schémas-de-base-de-données)
@@ -36,14 +38,23 @@
 
 ## 🔍 Aperçu
 
-**SGRH** (Système de Gestion des Ressources Humaines) est une **application mobile** cross-platform développée dans le cadre d'un **stage d'étude** au sein du **Conseil Provincial de Safi**. Cette application est conçue exclusivement pour les **fonctionnaires et agents** du conseil afin de moderniser et simplifier la gestion quotidienne des ressources humaines.
+**SIRH** (Système d'Information des Ressources Humaines) est une **application mobile Android** développée dans le cadre d'un **stage d'étude** au sein du **Conseil Provincial de Safi**. Cette application est conçue exclusivement pour les **fonctionnaires et agents** du conseil afin de moderniser et digitaliser la gestion quotidienne des ressources humaines.
 
-L'application s'inscrit dans une démarche de **digitalisation des processus RH** et permet :
+Le système se compose de :
 
-- La gestion centralisée des dossiers du personnel
-- Le suivi des présences et des congés
-- La consultation des fiches administratives
-- La synchronisation automatique des données via le cloud
+- 📱 **Application mobile Android** (Kotlin / Jetpack Compose) — interface utilisateur pour employés et administrateurs RH
+- 🖥️ **API REST backend** (Kotlin / Spring Boot 3) — logique métier et exposition des données
+- 🗄️ **Base de données PostgreSQL** — stockage persistant des données RH
+- ☁️ **Hébergement** sur **Hugging Face Spaces** via Docker
+
+L'application couvre l'ensemble du cycle de gestion RH :
+
+- Gestion complète des dossiers du personnel
+- Demandes de congés avec calcul automatique du solde
+- Sollicitations de documents administratifs
+- Génération de décisions administratives (PDF)
+- Notifications push en temps réel
+- Tableau de bord administrateur avec indicateurs clés
 
 > ⚠️ **Confidentialité :** Cette application et l'ensemble de son code source sont destinés **exclusivement** à un usage interne au Conseil Provincial de Safi. Toute diffusion, reproduction ou utilisation non autorisée est strictement interdite.
 
@@ -52,38 +63,39 @@ L'application s'inscrit dans une démarche de **digitalisation des processus RH*
 ## ✨ Fonctionnalités
 
 ### 🔐 Authentification & Sécurité
-- Connexion sécurisée via **Supabase Auth** (email/mot de passe)
-- Sessions persistantes avec reconnexion automatique
-- Déconnexion avec effacement sécurisé des données locales
-- Contrôle d'accès basé sur les rôles utilisateur
+- Connexion sécurisée par **JWT (JSON Web Token)** avec signature HS256
+- Tokens valides 24h avec renouvellement automatique
+- Architecture **Spring Security** avec filtres JWT personnalisés
+- Mots de passe chiffrés via **BCrypt**
+- Contrôle d'accès basé sur les rôles : `ADMIN_RH` et `EMPLOYE`
+- Routes publiques : login, liste des services
 
-### 👥 Gestion du Personnel
-- Consultation des fiches individuelles des agents
-- Annuaire du personnel avec recherche multicritère
-- Profils détaillés : informations personnelles, grade, affectation
+### 👑 Portail Administrateur (ADMIN_RH)
 
-### 📊 Tableau de Bord
-- Vue synthétique des indicateurs RH
-- Statistiques en temps réel
-- Graphiques et visualisations des données
+| Fonctionnalité | Description |
+|---|---|
+| **Tableau de bord** | Vue consolidée du personnel, indicateurs clés, accès rapide |
+| **Gestion des dossiers** | Ajout, modification, consultation et suppression des fonctionnaires |
+| **Recherche avancée** | Filtrage par nom, prénom ou CIN |
+| **Validation des congés** | Acceptation ou refus des demandes avec mise à jour automatique du solde |
+| **Traitement des demandes** | Gestion des sollicitations de documents (attestations, bulletins) |
+| **Décisions administratives** | Génération de PDF (قرارات) et accès aux modèles .docx (70+ templates) |
+| **Notifications** | Centre de notifications avec badge dynamique |
 
-### 💾 Mode Hors-Ligne
-- Cache local des données via **SQLite** (sqflite)
-- Consultation des informations sans connexion internet
-- Synchronisation automatique lors du retour en ligne
-- File d'attente des opérations non synchronisées
+### 👤 Portail Employé (Espace Personnel)
 
-### ☁️ Synchronisation Cloud
-- Sauvegarde automatique des données sur **Supabase**
-- Restauration des données depuis le cloud
-- Sync bidirectionnelle (local → cloud → local)
-- Résolution des conflits de données
+| Fonctionnalité | Description |
+|---|---|
+| **Profil personnel** | Identité, situation administrative, affectation, historique de carrière |
+| **Demande de congé** | Formulaire dématérialisé avec calcul en temps réel du solde restant |
+| **Sollicitation de documents** | Demande d'attestations de travail, fiches de paie, etc. |
+| **Suivi des requêtes** | Consultation du statut des demandes (en attente, validée, refusée) |
+| **Centre de notifications** | Alertes interactives avec badge de messages non lus |
 
-### 📱 Interface Utilisateur
-- Design moderne avec **Material You** (Material Design 3)
-- Thème sombre / clair adaptatif
-- Interface responsive adaptée à tous les écrans
-- Animations fluides et transitions élégantes
+### 📊 Gestion des données
+- **Import Excel** : Chargement des données employés via fichier `.xlsx` (N° PPR, Nom, CIN, Grade, Service)
+- **Génération de décisions** : Production de documents PDF via **Apache PDFBox**
+- **Modèles de documents** : 70+ modèles de décisions administratives en arabe (format .docx) intégrés dans l'application
 
 ---
 
@@ -92,133 +104,281 @@ L'application s'inscrit dans une démarche de **digitalisation des processus RH*
 ### Architecture globale
 
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│                   APPLICATION SGRH (Flutter)                      │
-├──────────────────────────────────────────────────────────────────┤
-│                        Couche Présentation                        │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌────────┐ │
-│  │   Home    │ │  Search  │ │  Profil  │ │  Détails │ │  Auth  │ │
-│  │  Screen   │ │  Screen  │ │  Screen  │ │  Screen  │ │ Screen │ │
-│  └─────┬────┘ └────┬─────┘ └────┬─────┘ └────┬─────┘ └───┬────┘ │
-│        └───────────┴────────────┴────────────┴────────────┘      │
-│                         ↓  BloC Events/States                      │
-│  ┌──────────────────────────────────────────────────────────┐    │
-│  │              Business Logic (BloC Pattern)                │    │
-│  │  ┌──────────┐ ┌────────────┐ ┌──────────┐ ┌──────────┐ │    │
-│  │  │ AppBloc  │ │ MoviesBloc │ │SearchBloc│ │DetailsBloc│ │    │
-│  │  └────┬─────┘ └─────┬──────┘ └────┬─────┘ └─────┬────┘ │    │
-│  └───────┴──────────────┴────────────┴───────────────┘─────┘    │
-│                         ↓ Repository Pattern                      │
-│  ┌──────────────────────────────────────────────────────────┐    │
-│  │              Couche Data (Repository)                     │    │
-│  │  ┌─────────────────┐  ┌──────────────────────────────┐   │    │
-│  │  │ MovieApiService  │  │     SupabaseService          │   │    │
-│  │  │ (TMDB/HF API)   │  │  (Auth + Cloud Sync)         │   │    │
-│  │  └────────┬────────┘  └──────────────┬───────────────┘   │    │
-│  │           │                          │                    │    │
-│  │  ┌────────┴──────────────────────────────────┐           │    │
-│  │  │         AppDatabase (SQLite Local)         │           │    │
-│  │  └────────────────────────────────────────────┘           │    │
-│  └──────────────────────────────────────────────────────────┘    │
-└──────────────────────────────────────────────────────────────────┘
-         │                          │
-         ▼                          ▼
-┌──────────────────┐    ┌──────────────────────────┐
-│   Hugging Face    │    │       Supabase           │
-│   (API Backend)   │    │  (Auth + PostgreSQL)     │
-│  hf.space/api/v1  │    │  eomiilauphxypqlefejg    │
-└──────────────────┘    └──────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────┐
+│                      APPLICATION ANDROID (Kotlin)                         │
+├──────────────────────────────────────────────────────────────────────────┤
+│                          Couche Présentation (UI)                         │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────┐  │
+│  │  Login   │ │Dashboard │ │  Profile  │ │  Conges  │ │  AdminPanel  │  │
+│  │  Screen  │ │  Screen  │ │  Screen   │ │  Screen  │ │  Screens     │  │
+│  └────┬─────┘ └────┬─────┘ └─────┬────┘ └────┬─────┘ └──────┬───────┘  │
+│       └────────────┴─────────────┴───────────┴──────────────┘          │
+│                         ↓  State (ViewModel + StateFlow)                │
+│  ┌────────────────────────────────────────────────────────────────┐     │
+│  │                    ViewModels (Business Logic)                   │     │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────┐ │     │
+│  │  │  Auth    │ │ Employe  │ │  Conge   │ │ Demande  │ │ Notif │ │     │
+│  │  │ViewModel │ │ViewModel │ │ViewModel  │ │ViewModel │ │VM     │ │     │
+│  │  └────┬─────┘ └────┬─────┘ └────┬─────┘ └────┬─────┘ └──┬───┘ │     │
+│  └───────┴────────────┴────────────┴────────────┴──────────┘─────┘     │
+│                         ↓  Retrofit / OkHttp                            │
+│  ┌────────────────────────────────────────────────────────────────┐     │
+│  │                    Couche Réseau (Network)                      │     │
+│  │  ┌────────────────────────────────────────────────────────┐    │     │
+│  │  │  ApiService (Retrofit Interface)                        │    │     │
+│  │  │  • Intercepteur JWT (Bearer Token)                      │    │     │
+│  │  │  • Intercepteur Logging HTTP                            │    │     │
+│  │  │  • Timeouts : 30s connect / 30s read                    │    │     │
+│  │  └────────────────────────────────────────────────────────┘    │     │
+│  └────────────────────────────────────────────────────────────────┘     │
+└──────────────────────────────────────────────────────────────────────────┘
+         │
+         │ HTTPS / JSON
+         ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│                    API REST (Spring Boot 3 / Kotlin)                      │
+├──────────────────────────────────────────────────────────────────────────┤
+│  ┌────────────────┐  ┌────────────────┐  ┌──────────────────────────┐   │
+│  │   Controllers   │  │   Services     │  │  Security (JWT/BCrypt)   │   │
+│  │  • Auth         │  │  • ExcelImport │  │  • JwtTokenUtil          │   │
+│  │  • Employe      │  │                │  │  • JwtRequestFilter      │   │
+│  │  • Conge        │  │                │  │  • CustomUserDetailsSvc  │   │
+│  │  • DemandeAdmin │  │                │  │  • WebSecurityConfig     │   │
+│  │  • Document     │  │                │  │                          │   │
+│  │  • Notification │  │                │  │                          │   │
+│  │  • ServiceDept  │  │                │  │                          │   │
+│  └────────┬───────┘  └────────┬───────┘  └──────────┬───────────────┘   │
+│           └──────────────────┴──────────────────────┘                    │
+│                         ↓ Spring Data JPA / Hibernate                     │
+│  ┌────────────────────────────────────────────────────────────────┐     │
+│  │  Repositories + Entities (Employe, Conge, Demande, Document,   │     │
+│  │                     Notification, ServiceDepartment, Utilisateur)│    │
+│  └───────────────────────────┬────────────────────────────────────┘     │
+└──────────────────────────────┼──────────────────────────────────────────┘
+                               │
+                               ▼
+              ┌──────────────────────────────────────┐
+              │     PostgreSQL (Supabase)             │
+              │  Tables : employes, services,         │
+              │  utilisateurs, conges,                │
+              │  demandes_administratives,            │
+              │  notifications, documents             │
+              │  RLS (Row Level Security) activé      │
+              └──────────────────────────────────────┘
 ```
 
-### Flux des données
+### Flux de données
 
 ```
-┌──────────────┐     ┌─────────────────┐     ┌──────────────┐
-│  Flutter App  │────▶│  Hugging Face    │────▶│   TMDB API    │
-│  (Interface)  │     │  (Proxy API)     │     │  (Données)    │
-└──────┬───────┘     └─────────────────┘     └──────────────┘
+┌──────────────┐    HTTPS/JSON     ┌──────────────────┐    JDBC     ┌──────────────┐
+│  Application  │ ────────────────▶ │  API Spring Boot │ ──────────▶ │  PostgreSQL  │
+│  Android      │ ◀──────────────── │  (Hugging Face)  │ ◀────────── │  (Supabase)  │
+│  (Kotlin)     │    JWT Token      └──────────────────┘    Results  └──────────────┘
+└──────────────┘
        │
-       │  ┌──────────────────────────────────────┐
-       ├──▶│        Supabase                      │
-       │   │  ┌────────────┐  ┌────────────────┐  │
-       │   │  │  Auth       │  │  watchlist_items│  │
-       │   │  │  (users)    │  │  watched_items  │  │
-       │   │  └────────────┘  └────────────────┘  │
-       │   └──────────────────────────────────────┘
-       │
-       │  ┌──────────────────────────────────────┐
-       └──▶│        SQLite Local                  │
-           │  ┌────────────┐  ┌────────────────┐  │
-           │  │local_movies│  │watchlist_movies │  │
-           │  │ (Cache)    │  │watched_movies   │  │
-           │  └────────────┘  └────────────────┘  │
-           └──────────────────────────────────────┘
+       │ Notifications push (WorkManager - polling 45s)
+       ▼
+┌──────────────────────────────────────────────────────────────┐
+│  Notifications système Android avec NotificationChannel      │
+│  • Canal HAUTE importance pour alertes temps réel             │
+│  • Heads-up notifications pour approbation/refus             │
+└──────────────────────────────────────────────────────────────┘
 ```
 
-### Cycle de synchronisation
+### Base de données (7 tables)
 
-1. **Démarrage** → Initialisation Supabase → Injection des dépendances → Sync locale vers cloud
-2. **Connexion** → Auth via Supabase → Récupération des données cloud → Mise à jour locale
-3. **Navigation** → Routage GoRouter → Shell avec BottomNavigationBar (5 onglets)
-4. **Interaction** → Événement Bloc → Repository → Datasource (API/DB) → Nouvel état → UI rebuild
-5. **Hors-ligne** → Requête locale SQLite → Résultat immédiat → Sync différée au retour en ligne
-6. **Déconnexion** → Effacement des données locales sensibles → Retour à l'écran de login
+```
+┌────────────────┐     ┌──────────────────┐
+│   employes     │     │   services        │
+├────────────────┤     ├──────────────────┤
+│ id (PK)        │◀───▶│ id (PK)          │
+│ nom_prenom     │     │ nom              │
+│ nom_prenom_ar  │     │ division         │
+│ cin (UQ)       │     │ direction        │
+│ numero_admin   │     └──────────────────┘
+│ grade          │
+│ echelle        │     ┌──────────────────┐
+│ echellon       │     │   utilisateurs    │
+│ indice         │     ├──────────────────┤
+│ service_id(FK) │     │ id (PK)          │
+│ ... (20+ cols) │     │ username (UQ)    │
+└────────┬───────┘     │ password (BCrypt)│
+         │             │ role             │
+         │             │ employe_id (FK)  │
+         │             └──────────────────┘
+         │
+    ┌────┴────┐      ┌──────────────────────┐
+    │ conges  │      │ demandes_administratives│
+    ├─────────┤      ├──────────────────────┤
+    │ id (PK) │      │ id (PK)              │
+    │ employe │      │ employe_id (FK)      │
+    │  _id(FK)│      │ type_document        │
+    │ date_deb│      │ statut               │
+    │ date_fin│      │ date_creation        │
+    │ statut  │      └──────────────────────┘
+    │ type    │
+    └─────────┘      ┌──────────────────────┐
+                     │   notifications      │
+    ┌──────────┐     ├──────────────────────┤
+    │ documents│     │ id (PK)              │
+    ├──────────┤     │ employe_id (FK)      │
+    │ id (PK)  │     │ titre                │
+    │ employe  │     │ message              │
+    │  _id(FK) │     │ lue (bool)           │
+    │ nom      │     │ date_creation        │
+    │ chemin   │     │ type / reference_id  │
+    │ date_up  │     └──────────────────────┘
+    └──────────┘
+```
+
+### Cycle de vie d'une demande de congé
+
+```
+1. Employé soumet une demande de congé
+       │
+       ▼
+2. API : POST /api/conges/demande/{employeId}
+   • Vérification : pas de dates dans le passé, max 60 jours, solde suffisant
+   • Création du congé (statut = EN_ATTENTE)
+   • Création d'une notification pour l'admin
+       │
+       ▼
+3. Administrateur reçoit une notification push
+       │
+       ├──▶ PUT /api/conges/{id}/valider  → Notification à l'employé
+       │
+       └──▶ PUT /api/conges/{id}/refuser  → Notification à l'employé
+       │
+       ▼
+4. Employé notifié du changement de statut (temps réel)
+```
+
+---
+
+## 🔌 API Endpoints
+
+### Authentification
+
+| Méthode | Endpoint | Description | Auth |
+|---|---|---|---|
+| `POST` | `/api/auth/login` | Connexion (body: `{"username", "password"}`) → JWT + rôle + employeId | Public |
+
+### Employés
+
+| Méthode | Endpoint | Description | Rôle requis |
+|---|---|---|---|
+| `GET` | `/api/employes` | Liste de tous les employés | Tout utilisateur |
+| `GET` | `/api/employes/{id}` | Détail d'un employé | Tout utilisateur |
+| `GET` | `/api/employes/search?query=` | Recherche par nom ou CIN | Tout utilisateur |
+| `POST` | `/api/employes` | Ajouter un employé + créer son compte | ADMIN_RH |
+| `PUT` | `/api/employes/{id}` | Modifier un employé | ADMIN_RH |
+| `DELETE` | `/api/employes/{id}` | Supprimer un employé | ADMIN_RH |
+
+### Congés (Leave)
+
+| Méthode | Endpoint | Description | Rôle requis |
+|---|---|---|---|
+| `GET` | `/api/conges` | Liste de toutes les demandes | ADMIN_RH |
+| `GET` | `/api/conges/employe/{employeId}` | Demandes d'un employé | Employé concerné |
+| `GET` | `/api/conges/employe/{employeId}/solde` | Solde de congés restant | Employé concerné |
+| `POST` | `/api/conges/demande/{employeId}` | Nouvelle demande de congé | Employé concerné |
+| `PUT` | `/api/conges/{id}/valider` | Valider une demande | ADMIN_RH |
+| `PUT` | `/api/conges/{id}/refuser` | Refuser une demande | ADMIN_RH |
+
+### Demandes Administratives
+
+| Méthode | Endpoint | Description | Rôle requis |
+|---|---|---|---|
+| `GET` | `/api/demandes` | Liste de toutes les demandes | ADMIN_RH |
+| `GET` | `/api/demandes/employe/{employeId}` | Demandes d'un employé | Employé concerné |
+| `POST` | `/api/demandes/employe/{employeId}` | Nouvelle demande documentaire | Employé concerné |
+| `PUT` | `/api/demandes/{id}/traiter?nouveauStatut=` | Traiter une demande | ADMIN_RH |
+
+### Documents & Décisions
+
+| Méthode | Endpoint | Description | Rôle requis |
+|---|---|---|---|
+| `GET` | `/api/documents/decision/{employeId}` | Générer PDF décision administrative | ADMIN_RH |
+
+### Notifications
+
+| Méthode | Endpoint | Description | Rôle requis |
+|---|---|---|---|
+| `GET` | `/api/notifications/employe/{employeId}` | Notifications d'un employé | Employé concerné |
+| `GET` | `/api/notifications/employe/{employeId}/non-lues` | Notifications non lues | Employé concerné |
+| `PUT` | `/api/notifications/{id}/lire` | Marquer comme lue | Tout utilisateur |
+| `DELETE` | `/api/notifications/{id}` | Supprimer une notification | Tout utilisateur |
+
+### Services
+
+| Méthode | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/services` | Liste des services/directions |
 
 ---
 
 ## 📱 Captures d'écran
 
-> 📄 Les 22 captures d'écran ci-dessous sont extraites du dossier de livrables visuels. Le PDF original est disponible dans [`assets/deliverables/`](assets/deliverables/).
+> 📄 Les 22 captures d'écran ci-dessous sont extraites du dossier de livrables visuels. Cliquez sur une image pour l'agrandir.
 
 ### 🔐 Authentification & Interface
 
-| Authentification | Mode Clair / Sombre |
-|:-:|:-:|
-| <img src="screenshots/02-authentification.png" alt="Authentification" width="200"/> | <img src="screenshots/03-mode-clair-sombre.png" alt="Mode Clair/Sombre" width="200"/> |
+<p align="center">
+  <img src="screenshots/02-authentification.png" alt="Authentification" width="350"/>
+  <img src="screenshots/03-mode-clair-sombre.png" alt="Mode Clair/Sombre" width="350"/>
+</p>
 
 ### 👑 Portail Administrateur (Gestion RH)
 
-| Tableau de bord | Tableau de bord (2) |
-|:-:|:-:|
-| <img src="screenshots/04-admin-tableau-de-bord.png" alt="Admin Dashboard" width="200"/> | <img src="screenshots/05-admin-tableau-de-bord-2.png" alt="Admin Dashboard 2" width="200"/> |
+<p align="center">
+  <img src="screenshots/04-admin-tableau-de-bord.png" alt="Tableau de bord" width="350"/>
+  <img src="screenshots/05-admin-tableau-de-bord-2.png" alt="Tableau de bord 2" width="350"/>
+</p>
 
-| Recherche avancée | Recherche avancée (2) |
-|:-:|:-:|
-| <img src="screenshots/06-recherche-avancee.png" alt="Recherche avancée" width="200"/> | <img src="screenshots/07-recherche-avancee-2.png" alt="Recherche avancée 2" width="200"/> |
+<p align="center">
+  <img src="screenshots/06-recherche-avancee.png" alt="Recherche avancée" width="350"/>
+  <img src="screenshots/07-recherche-avancee-2.png" alt="Recherche avancée 2" width="350"/>
+</p>
 
-| Ajout fonctionnaire | Ajout fonctionnaire (2) |
-|:-:|:-:|
-| <img src="screenshots/08-ajout-fonctionnaire.png" alt="Ajout fonctionnaire" width="200"/> | <img src="screenshots/09-ajout-fonctionnaire-2.png" alt="Ajout fonctionnaire 2" width="200"/> |
+<p align="center">
+  <img src="screenshots/08-ajout-fonctionnaire.png" alt="Ajout fonctionnaire" width="350"/>
+  <img src="screenshots/09-ajout-fonctionnaire-2.png" alt="Ajout fonctionnaire 2" width="350"/>
+</p>
 
-| Ajout fonctionnaire (3) | Modification agent |
-|:-:|:-:|
-| <img src="screenshots/10-ajout-fonctionnaire-3.png" alt="Ajout fonctionnaire 3" width="200"/> | <img src="screenshots/11-modification-agent.png" alt="Modification agent" width="200"/> |
+<p align="center">
+  <img src="screenshots/10-ajout-fonctionnaire-3.png" alt="Ajout fonctionnaire 3" width="350"/>
+  <img src="screenshots/11-modification-agent.png" alt="Modification agent" width="350"/>
+</p>
 
-| Validation congés | Validation administrative |
-|:-:|:-:|
-| <img src="screenshots/12-validation-conges.png" alt="Validation congés" width="200"/> | <img src="screenshots/13-validation-administrative.png" alt="Validation administrative" width="200"/> |
+<p align="center">
+  <img src="screenshots/12-validation-conges.png" alt="Validation congés" width="350"/>
+  <img src="screenshots/13-validation-administrative.png" alt="Validation administrative" width="350"/>
+</p>
 
-| Notifications admin |
-|:-:|
-| <img src="screenshots/14-notifications-admin.png" alt="Notifications admin" width="200"/> |
+<p align="center">
+  <img src="screenshots/14-notifications-admin.png" alt="Notifications admin" width="350"/>
+</p>
 
 ### 👤 Portail Employé (Espace Personnel)
 
-| Accueil employé | Dossier numérique |
-|:-:|:-:|
-| <img src="screenshots/15-employe-portail.png" alt="Portail employé" width="200"/> | <img src="screenshots/16-employe-dossier-numerique.png" alt="Dossier numérique" width="200"/> |
+<p align="center">
+  <img src="screenshots/15-employe-portail.png" alt="Portail employé" width="350"/>
+  <img src="screenshots/16-employe-dossier-numerique.png" alt="Dossier numérique" width="350"/>
+</p>
 
-| Détails agent | Demande de congé |
-|:-:|:-:|
-| <img src="screenshots/17-employe-details.png" alt="Détails agent" width="200"/> | <img src="screenshots/18-demande-conge.png" alt="Demande congé" width="200"/> |
+<p align="center">
+  <img src="screenshots/17-employe-details.png" alt="Détails agent" width="350"/>
+  <img src="screenshots/18-demande-conge.png" alt="Demande congé" width="350"/>
+</p>
 
-| Demande de congé (2) | Sollicitation documents |
-|:-:|:-:|
-| <img src="screenshots/19-demande-conge-2.png" alt="Demande congé 2" width="200"/> | <img src="screenshots/20-sollicitation-documents.png" alt="Sollicitation documents" width="200"/> |
+<p align="center">
+  <img src="screenshots/19-demande-conge-2.png" alt="Demande congé 2" width="350"/>
+  <img src="screenshots/20-sollicitation-documents.png" alt="Sollicitation documents" width="350"/>
+</p>
 
-| Notifications employé |
-|:-:|
-| <img src="screenshots/21-notifications-employe.png" alt="Notifications employé" width="200"/> |
+<p align="center">
+  <img src="screenshots/21-notifications-employe.png" alt="Notifications employé" width="350"/>
+</p>
 
 ---
 
@@ -247,32 +407,37 @@ adb install SGRH.apk
 
 - **Android** : API 21+ (Android 5.0 Lollipop minimum)
 - **Espace de stockage** : ~150 Mo
-- **Connexion Internet** : Requise pour la synchronisation cloud
+- **Connexion Internet** : Requise pour l'authentification et la synchronisation
+
+### Identifiants de test
+
+| Rôle | Identifiant | Mot de passe |
+|---|---|---|
+| **Administrateur RH** | `admin` | `sddfConseilperso2026` |
+| **Employé** | `achraf` | `sddfConseilperso2026` |
+
+> En base de données PostgreSQL, le mot de passe par défaut pour tous les comptes est `admin123` (hash BCrypt). En production, les mots de passe individuels sont générés selon la formule `PPR + CIN`.
 
 ---
 
 ## 🗄️ Schémas de base de données
 
-### Schéma relationnel Supabase
-
-![Schéma Supabase](assets/deliverables/flux/schema-supabase.png)
-
 ### Architecture et flux des données
 
 | Diagramme | Description |
 |-----------|-------------|
-| ![BD Schema](assets/deliverables/flux/bd%20xhema.PNG) | Schéma conceptuel de la base de données |
-| ![Architecture Logicielle](assets/deliverables/flux/RCHITECTURE%20LOGICIEL.PNG) | Architecture logicielle du système |
-| ![Flux de Données](assets/deliverables/flux/FLUX%20DONNES.PNG) | Diagramme des flux de données |
-| ![Chemin des Rôles](assets/deliverables/flux/cheminrole.png) | Parcours et rôles utilisateurs |
-| ![Couche Base](assets/deliverables/flux/COUCHE%20BSSE.PNG) | Architecture en couches - Base |
-| ![Couche Haute](assets/deliverables/flux/COUCHE%20HUTE.PNG) | Architecture en couches - Haute |
-| ![Cas d'usage EMP](assets/deliverables/flux/CS%20EMP.PNG) | Cas d'utilisation - Employé |
-| ![Cas d'usage RH](assets/deliverables/flux/CS%20RH.PNG) | Cas d'utilisation - RH |
-| ![Cas d'usage Transverse](assets/deliverables/flux/CS%20TRNSVERSE.PNG) | Cas d'utilisation - Transverse |
-| ![Flux](assets/deliverables/flux/FLO.PNG) | Diagramme de flux global |
-| ![Sécurité](assets/deliverables/flux/SECURTIE%20FLU.PNG) | Schéma de sécurité |
-| ![Gantt](assets/deliverables/flux/gin%20de%20temps.PNG) | Diagramme de Gantt du projet |
+| <img src="assets/deliverables/flux/bd%20xhema.PNG" alt="BD Schema" width="300"/> | Schéma conceptuel de la base de données (7 tables) |
+| <img src="assets/deliverables/flux/RCHITECTURE%20LOGICIEL.PNG" alt="Architecture Logicielle" width="300"/> | Architecture logicielle complète du système |
+| <img src="assets/deliverables/flux/FLUX%20DONNES.PNG" alt="Flux de Données" width="300"/> | Diagramme des flux de données |
+| <img src="assets/deliverables/flux/cheminrole.png" alt="Chemin des Rôles" width="300"/> | Parcours et rôles utilisateurs (Admin RH / Employé) |
+| <img src="assets/deliverables/flux/COUCHE%20BSSE.PNG" alt="Couche Base" width="300"/> | Architecture en couches — Niveau base |
+| <img src="assets/deliverables/flux/COUCHE%20HUTE.PNG" alt="Couche Haute" width="300"/> | Architecture en couches — Niveau haut |
+| <img src="assets/deliverables/flux/CS%20EMP.PNG" alt="Cas d'usage EMP" width="300"/> | Cas d'utilisation — Employé (profil, congés, documents, notifications) |
+| <img src="assets/deliverables/flux/CS%20RH.PNG" alt="Cas d'usage RH" width="300"/> | Cas d'utilisation — Administrateur RH (gestion du personnel, validations) |
+| <img src="assets/deliverables/flux/CS%20TRNSVERSE.PNG" alt="Cas d'usage Transverse" width="300"/> | Cas d'utilisation — Modules transverses |
+| <img src="assets/deliverables/flux/FLO.PNG" alt="Flux" width="300"/> | Diagramme de flux global des processus RH |
+| <img src="assets/deliverables/flux/SECURTIE%20FLU.PNG" alt="Sécurité" width="300"/> | Schéma de sécurité (JWT, BCrypt, RLS Supabase) |
+| <img src="assets/deliverables/flux/gin%20de%20temps.PNG" alt="Gantt" width="300"/> | Diagramme de Gantt du projet |
 
 ---
 
@@ -281,31 +446,51 @@ adb install SGRH.apk
 ### Frontend Mobile
 
 | Technologie | Version | Utilisation |
-|-------------|---------|-------------|
-| **Flutter** | 3.41.9 | Framework cross-platform |
-| **Dart** | 3.11.5 | Langage de programmation |
-| **flutter_bloc** | 8.1.x | Gestion d'état (pattern BLoC) |
-| **go_router** | 13.2.x | Navigation déclarative |
-| **sqflite** | 2.3.x | Base de données locale SQLite |
-| **dio** | 5.4.x | Client HTTP pour les API |
-| **get_it** | 7.7.x | Injection de dépendances |
-| **google_fonts** | 6.1.x | Typographie (Inter, Outfit) |
-| **supabase_flutter** | 2.8.x | Authentification & cloud sync |
-| **youtube_player_flutter** | 9.1.x | Lecteur multimédia intégré |
-| **cached_network_image** | 3.3.x | Cache des images réseau |
-| **shimmer** | 3.0.x | Effets de chargement |
-| **carousel_slider** | 4.2.x | Carrousel d'images |
-| **flutter_svg** | 2.0.x | Affichage d'icônes vectorielles |
-| **json_annotation** | 4.9.x | Sérialisation JSON |
-| **equatable** | 2.0.x | Comparaison d'objets |
+|---|---|---|
+| **Android SDK** | API 34 (target) | Plateforme mobile |
+| **Kotlin** | 2.2.21 | Langage de programmation |
+| **Jetpack Compose** | Dernière (BOM) | UI déclarative moderne |
+| **Material Design 3** | — | Thème futuriste (glassmorphism) |
+| **Navigation Compose** | — | Routage et navigation entre écrans |
+| **Retrofit 2** | 2.9.0 | Client HTTP typé pour l'API REST |
+| **OkHttp** | 4.x | Intercepteurs JWT + logging HTTP |
+| **Gson** | — | Sérialisation/désérialisation JSON |
+| **ViewModel** | — | Architecture MVVM (gestion d'état) |
+| **StateFlow** | — | États réactifs pour l'UI |
+| **Coroutines** | — | Programmation asynchrone |
+| **WorkManager** | — | Notifications push polling (45s) |
+| **DataStore / SharedPreferences** | — | Stockage local des préférences |
 
-### Backend & Cloud
+### Backend
+
+| Technologie | Version | Utilisation |
+|---|---|---|
+| **Spring Boot** | 3.4.3 | Framework REST API |
+| **Kotlin** | 2.2.21 | Langage backend |
+| **Spring Data JPA / Hibernate** | — | ORM et mapping objet-relationnel |
+| **Spring Security** | — | Authentification et autorisation |
+| **JWT (jjwt)** | 0.11.5 | Tokens d'authentification (HS256) |
+| **BCrypt** | — | Hachage des mots de passe |
+| **Apache PDFBox** | 2.0.28 | Génération de documents PDF |
+| **Apache POI** | 5.2.3 | Import Excel des données employés |
+| **Maven** | — | Build et gestion des dépendances |
+
+### Base de données
 
 | Technologie | Utilisation |
-|-------------|-------------|
-| **Supabase** | Authentification + Base PostgreSQL + Stockage |
-| **Hugging Face Spaces** | Hébergement de l'API backend (Spring Boot) |
-| **TMDB API** | Source de données (contenu médias) |
+|---|---|
+| **PostgreSQL** | Base de données principale (Supabase) |
+| **MySQL** | Base de développement local |
+| **Supabase RLS** | Row Level Security pour la protection des données |
+| **Spring Data JPA** | Requêtes et migrations automatiques |
+
+### Déploiement
+
+| Technologie | Utilisation |
+|---|---|
+| **Docker** | Conteneurisation de l'API backend |
+| **Hugging Face Spaces** | Hébergement cloud du backend |
+| **Hugging Face URL** | `https://sdawgxxx-sirh-grh.hf.space` |
 
 ---
 
@@ -314,37 +499,37 @@ adb install SGRH.apk
 Le dossier [`assets/deliverables/`](assets/deliverables/) contient l'ensemble des livrables du projet :
 
 | Fichier | Description |
-|---------|-------------|
-| 📄 `Livrables Visuels _ Dossier de captures d'écran de l'application mobile.pdf` | Dossier complet de captures d'écran |
+|---|---|
+| 📄 `Livrables Visuels _ Dossier de captures d'écran de l'application mobile.pdf` | Dossier complet de 22 captures d'écran |
 | 📁 `flux/` | Schémas d'architecture, flux, cas d'utilisation |
-| 🖼️ `flux/bd xhema.PNG` | Schéma de base de données |
-| 🖼️ `flux/cheminrole.png` | Parcours des rôles |
-| 🖼️ `flux/COUCHE BSSE.PNG` | Architecture - Couche basse |
-| 🖼️ `flux/COUCHE HUTE.PNG` | Architecture - Couche haute |
-| 🖼️ `flux/CS EMP.PNG` | Cas d'usage employé |
-| 🖼️ `flux/CS RH.PNG` | Cas d'usage RH |
-| 🖼️ `flux/CS TRNSVERSE.PNG` | Cas d'usage transverse |
-| 🖼️ `flux/FLO.PNG` | Diagramme de flux |
-| 🖼️ `flux/FLUX DONNES.PNG` | Flux de données |
-| 🖼️ `flux/gin de temps.PNG` | Diagramme de Gantt |
-| 🖼️ `flux/RCHITECTURE LOGICIEL.PNG` | Architecture logicielle |
-| 🖼️ `flux/schema-supabase.png` | Schéma Supabase |
-| 🖼️ `flux/SECURTIE FLU.PNG` | Schéma de sécurité |
+| 🖼️ `flux/bd xhema.PNG` | Schéma conceptuel de la base de données (7 tables) |
+| 🖼️ `flux/cheminrole.png` | Parcours des rôles (Admin RH / Employé) |
+| 🖼️ `flux/COUCHE BSSE.PNG` | Architecture — Couche basse |
+| 🖼️ `flux/COUCHE HUTE.PNG` | Architecture — Couche haute |
+| 🖼️ `flux/CS EMP.PNG` | Cas d'utilisation — Employé |
+| 🖼️ `flux/CS RH.PNG` | Cas d'utilisation — Administrateur RH |
+| 🖼️ `flux/CS TRNSVERSE.PNG` | Cas d'utilisation — Transverse |
+| 🖼️ `flux/FLO.PNG` | Diagramme de flux global |
+| 🖼️ `flux/FLUX DONNES.PNG` | Diagramme des flux de données |
+| 🖼️ `flux/gin de temps.PNG` | Diagramme de Gantt du projet |
+| 🖼️ `flux/RCHITECTURE LOGICIEL.PNG` | Architecture logicielle complète |
+| 🖼️ `flux/SECURTIE FLU.PNG` | Schéma de sécurité (JWT, BCrypt, RLS) |
 
 ---
 
 ## 🔒 Sécurité et confidentialité
 
-Conformément aux exigences du Conseil Provincial de Safi, les mesures suivantes sont appliquées :
+Conformément aux exigences du Conseil Provincial de Safi :
 
-- **Authentification obligatoire** : Toute utilisation nécessite un compte valide
-- **Données chiffrées** : Les communications sont sécurisées via HTTPS
-- **Session sécurisée** : Utilisation de JWT tokens avec expiration
-- **Données locales protégées** : La base SQLite locale est isolée par application
-- **Pas de stockage de données sensibles** : Les informations confidentielles ne sont pas persistées localement sans chiffrement
-- **Sync contrôlée** : La synchronisation cloud est déclenchée uniquement après authentification réussie
+- **Authentification JWT obligatoire** : Aucun accès aux données sans token valide
+- **Mots de passe BCrypt** : Chiffrement fort des mots de passe utilisateurs
+- **Communications HTTPS** : Toutes les données transitent par TLS
+- **RLS Supabase** : Row Level Security pour isoler les données par utilisateur
+- **Rôles distincts** : `ADMIN_RH` (gestion complète) / `EMPLOYE` (accès restreint à son dossier)
+- **Notifications push haute importance** : Alertes temps réel pour les validations
+- **Tokens 24h** : Expiration automatique des sessions avec reconnexion requise
 
-> ⚠️ **Note importante :** Ce dépôt ne contient **aucune donnée nominative** ni information sensible relative aux agents du Conseil Provincial de Safi. Les captures d'écran et schémas présentés sont des illustrations à but démonstratif.
+> ⚠️ **Note importante :** Ce dépôt ne contient **aucune donnée nominative** réelle des agents du Conseil Provincial de Safi. Les données présentées dans les captures d'écran sont des illustrations à but démonstratif.
 
 ---
 
