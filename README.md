@@ -561,7 +561,7 @@ Conformément aux exigences du Conseil Provincial de Safi :
 
 ## 👤 Auteur
 
-**Saad Staili** — Stagiaire développeur
+**Saad Staili** 
 
 - 📧 Email : saadstaili1903@gmail.com
 - 💼 LinkedIn : [Saad Staili](https://linkedin.com/in/saad-staili)
