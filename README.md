@@ -417,20 +417,53 @@ adb install SGRH.apk
 
 ### Architecture et flux des données
 
-| Diagramme | Description |
-|-----------|-------------|
-| <img src="assets/deliverables/flux/bd%20xhema.PNG" alt="BD Schema" width="500"/> | Schéma conceptuel de la base de données (7 tables) |
-| <img src="assets/deliverables/flux/RCHITECTURE%20LOGICIEL.PNG" alt="Architecture Logicielle" width="500"/> | Architecture logicielle complète du système |
-| <img src="assets/deliverables/flux/FLUX%20DONNES.PNG" alt="Flux de Données" width="500"/> | Diagramme des flux de données |
-| <img src="assets/deliverables/flux/cheminrole.png" alt="Chemin des Rôles" width="500"/> | Parcours et rôles utilisateurs (Admin RH / Employé) |
-| <img src="assets/deliverables/flux/COUCHE%20BSSE.PNG" alt="Couche Base" width="500"/> | Architecture en couches — Niveau base |
-| <img src="assets/deliverables/flux/COUCHE%20HUTE.PNG" alt="Couche Haute" width="500"/> | Architecture en couches — Niveau haut |
-| <img src="assets/deliverables/flux/CS%20EMP.PNG" alt="Cas d'usage EMP" width="500"/> | Cas d'utilisation — Employé (profil, congés, documents, notifications) |
-| <img src="assets/deliverables/flux/CS%20RH.PNG" alt="Cas d'usage RH" width="500"/> | Cas d'utilisation — Administrateur RH (gestion du personnel, validations) |
-| <img src="assets/deliverables/flux/CS%20TRNSVERSE.PNG" alt="Cas d'usage Transverse" width="500"/> | Cas d'utilisation — Modules transverses |
-| <img src="assets/deliverables/flux/FLO.PNG" alt="Flux" width="500"/> | Diagramme de flux global des processus RH |
-| <img src="assets/deliverables/flux/SECURTIE%20FLU.PNG" alt="Sécurité" width="500"/> | Schéma de sécurité (JWT, BCrypt, RLS Supabase) |
-| <img src="assets/deliverables/flux/gin%20de%20temps.PNG" alt="Gantt" width="500"/> | Diagramme de Gantt du projet |
+**Schéma conceptuel de la base de données (7 tables)**
+
+<img src="assets/deliverables/flux/bd%20xhema.PNG" alt="BD Schema"/>
+
+**Architecture logicielle complète du système**
+
+<img src="assets/deliverables/flux/RCHITECTURE%20LOGICIEL.PNG" alt="Architecture Logicielle"/>
+
+**Diagramme des flux de données**
+
+<img src="assets/deliverables/flux/FLUX%20DONNES.PNG" alt="Flux de Données"/>
+
+**Parcours et rôles utilisateurs (Admin RH / Employé)**
+
+<img src="assets/deliverables/flux/cheminrole.png" alt="Chemin des Rôles"/>
+
+**Architecture en couches — Niveau base**
+
+<img src="assets/deliverables/flux/COUCHE%20BSSE.PNG" alt="Couche Base"/>
+
+**Architecture en couches — Niveau haut**
+
+<img src="assets/deliverables/flux/COUCHE%20HUTE.PNG" alt="Couche Haute"/>
+
+**Cas d'utilisation — Employé (profil, congés, documents, notifications)**
+
+<img src="assets/deliverables/flux/CS%20EMP.PNG" alt="Cas d'usage EMP"/>
+
+**Cas d'utilisation — Administrateur RH (gestion du personnel, validations)**
+
+<img src="assets/deliverables/flux/CS%20RH.PNG" alt="Cas d'usage RH"/>
+
+**Cas d'utilisation — Modules transverses**
+
+<img src="assets/deliverables/flux/CS%20TRNSVERSE.PNG" alt="Cas d'usage Transverse"/>
+
+**Diagramme de flux global des processus RH**
+
+<img src="assets/deliverables/flux/FLO.PNG" alt="Flux"/>
+
+**Schéma de sécurité (JWT, BCrypt, RLS Supabase)**
+
+<img src="assets/deliverables/flux/SECURTIE%20FLU.PNG" alt="Sécurité"/>
+
+**Diagramme de Gantt du projet**
+
+<img src="assets/deliverables/flux/gin%20de%20temps.PNG" alt="Gantt"/>
 
 ---
 
