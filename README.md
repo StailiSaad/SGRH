@@ -168,20 +168,57 @@ L'application s'inscrit dans une démarche de **digitalisation des processus RH*
 
 ## 📱 Captures d'écran
 
-| Écran d'accueil | Tendances & Populaires |
-|:-:|:-:|
-| <img src="screenshots/home.jpeg" alt="Home" width="200"/> | <img src="screenshots/trending.jpeg" alt="Trending" width="200"/> |
+> 📄 Les 22 captures d'écran ci-dessous sont extraites du dossier de livrables visuels. Le PDF original est disponible dans [`assets/deliverables/`](assets/deliverables/).
 
-| Recherche | Détails du dossier |
-|:-:|:-:|
-| <img src="screenshots/search.jpeg" alt="Search" width="200"/> | <img src="screenshots/details1.jpeg" alt="Details" width="200"/> |
+### 🔐 Authentification & Interface
 
-| Watchlist (Suivi) | Archives (Traités) |
+| Authentification | Mode Clair / Sombre |
 |:-:|:-:|
-| <img src="screenshots/watchlist.jpeg" alt="Watchlist" width="200"/> | <img src="screenshots/seen.jpeg" alt="Seen" width="200"/> |
+| <img src="screenshots/02-authentification.png" alt="Authentification" width="200"/> | <img src="screenshots/03-mode-clair-sombre.png" alt="Mode Clair/Sombre" width="200"/> |
 
-> 📄 Un dossier complet de captures d'écran est disponible dans les livrables :
-> [`assets/deliverables/Livrables Visuels _ Dossier de captures d'écran de l'application mobile.pdf`](assets/deliverables/Livrables%20Visuels%20_%20Dossier%20de%20captures%20d'écran%20de%20l'application%20mobile.pdf)
+### 👑 Portail Administrateur (Gestion RH)
+
+| Tableau de bord | Tableau de bord (2) |
+|:-:|:-:|
+| <img src="screenshots/04-admin-tableau-de-bord.png" alt="Admin Dashboard" width="200"/> | <img src="screenshots/05-admin-tableau-de-bord-2.png" alt="Admin Dashboard 2" width="200"/> |
+
+| Recherche avancée | Recherche avancée (2) |
+|:-:|:-:|
+| <img src="screenshots/06-recherche-avancee.png" alt="Recherche avancée" width="200"/> | <img src="screenshots/07-recherche-avancee-2.png" alt="Recherche avancée 2" width="200"/> |
+
+| Ajout fonctionnaire | Ajout fonctionnaire (2) |
+|:-:|:-:|
+| <img src="screenshots/08-ajout-fonctionnaire.png" alt="Ajout fonctionnaire" width="200"/> | <img src="screenshots/09-ajout-fonctionnaire-2.png" alt="Ajout fonctionnaire 2" width="200"/> |
+
+| Ajout fonctionnaire (3) | Modification agent |
+|:-:|:-:|
+| <img src="screenshots/10-ajout-fonctionnaire-3.png" alt="Ajout fonctionnaire 3" width="200"/> | <img src="screenshots/11-modification-agent.png" alt="Modification agent" width="200"/> |
+
+| Validation congés | Validation administrative |
+|:-:|:-:|
+| <img src="screenshots/12-validation-conges.png" alt="Validation congés" width="200"/> | <img src="screenshots/13-validation-administrative.png" alt="Validation administrative" width="200"/> |
+
+| Notifications admin |
+|:-:|
+| <img src="screenshots/14-notifications-admin.png" alt="Notifications admin" width="200"/> |
+
+### 👤 Portail Employé (Espace Personnel)
+
+| Accueil employé | Dossier numérique |
+|:-:|:-:|
+| <img src="screenshots/15-employe-portail.png" alt="Portail employé" width="200"/> | <img src="screenshots/16-employe-dossier-numerique.png" alt="Dossier numérique" width="200"/> |
+
+| Détails agent | Demande de congé |
+|:-:|:-:|
+| <img src="screenshots/17-employe-details.png" alt="Détails agent" width="200"/> | <img src="screenshots/18-demande-conge.png" alt="Demande congé" width="200"/> |
+
+| Demande de congé (2) | Sollicitation documents |
+|:-:|:-:|
+| <img src="screenshots/19-demande-conge-2.png" alt="Demande congé 2" width="200"/> | <img src="screenshots/20-sollicitation-documents.png" alt="Sollicitation documents" width="200"/> |
+
+| Notifications employé |
+|:-:|
+| <img src="screenshots/21-notifications-employe.png" alt="Notifications employé" width="200"/> |
 
 ---
 
