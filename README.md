@@ -6,7 +6,8 @@
 
 <p align="center">
   <strong>Conseil Provincial de Safi</strong><br>
-  <em>Application mobile de gestion des ressources humaines</em>
+  <em>Application mobile de gestion des ressources humaines</em><br>
+  Version 1.0 | Platform Android | Kotlin | Spring Boot | PostgreSQL | Supabase | Hugging Face
 </p>
 
 <p align="center">
@@ -15,6 +16,7 @@
   <img src="https://img.shields.io/badge/Kotlin-2.2+-7F52FF?logo=kotlin" alt="Kotlin"/>
   <img src="https://img.shields.io/badge/Spring_Boot-3.4-6DB33F?logo=springboot" alt="Spring Boot"/>
   <img src="https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql" alt="PostgreSQL"/>
+  <img src="https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase" alt="Supabase"/>
   <img src="https://img.shields.io/badge/Hugging_Face-FFD21E?logo=huggingface" alt="Hugging Face"/>
 </p>
 
